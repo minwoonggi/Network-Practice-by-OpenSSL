@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./server
+    container_name: server
+    ports:
+      - "9443:9443" # 포트 매핑
+    volumes:
+      - ./server/data:/data
+      - ./shared:/shared
+    healthcheck:
+      test: ["CMD", "netstat", "-tuln", "|", "grep", "9443"]
+      interval: 10s
+      retries: 5
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+    container_name: client
+    depends_on:
+      server:
+        condition: service_healthy
+    volumes:
+      - ./shared:/shared
+    restart: on-failure
