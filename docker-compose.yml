@@ -9,8 +9,11 @@ services:
     volumes:
       - ./server/data:/data
       - ./shared:/shared
+      # 헬스체크를 10초마다 한 번씩 실행하여 서버가 작동하는지 확인
+      # 서버가 5번 연속으로 헬스체크에 실패하면, Docker는 서버가 비정상 상태로 간주
     healthcheck:
       test: ["CMD", "netstat", "-tuln", "|", "grep", "9443"]
+      # netstat -tuln | grep 9443 을 통해 서버의 9443포트가 LISTEN 상태인지 확인
       interval: 10s
       retries: 5
     restart: unless-stopped
