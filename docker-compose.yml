@@ -14,8 +14,8 @@ services:
     healthcheck:
       test: ["CMD", "netstat", "-tuln", "|", "grep", "9443"]
       # netstat -tuln | grep 9443 을 통해 서버의 9443포트가 LISTEN 상태인지 확인
-      interval: 10s
-      retries: 5
+      interval: 5s
+      retries: 2
     restart: unless-stopped
 
   client:
